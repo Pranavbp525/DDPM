@@ -128,31 +128,5 @@ train_losses, val_losses = train(model= DiffusionModel,
 # Save the model
 torch.save(DiffusionModel.state_dict(), 'ddpm.pth')
 
-total_timesteps = 300
-startBeta, endBeta = 0.0001,0.2
-inputChannels, outputChannels = 3, 3
-num_epochs = 100
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-DiffusionModel = UNet(inputChannels, outputChannels)
-optimizer = torch.optim.Adam(DiffusionModel.parameters(), lr=1e-3)
-criterion = torch.nn.MSELoss()
-diffuser = NoiseDiffuser(startBeta, endBeta, total_timesteps, device)
-
-
-DiffusionModel = DiffusionModel.to(device)
-train_losses, val_losses = train(model= DiffusionModel,
-                                 train_loader= trainloader,
-                                 val_loader= valloader,
-                                 optimizer= optimizer,
-                                 criterion= criterion,
-                                 device= device,
-                                 num_epochs= num_epochs,
-                                 diffuser= diffuser,
-                                 totalTrainingTimesteps=total_timesteps)
-
-# Save the model
-torch.save(DiffusionModel.state_dict(), 'ddpm.pth')
 
